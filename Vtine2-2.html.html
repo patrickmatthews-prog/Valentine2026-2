@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+            user-select: none;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            position: relative;
+            max-width: 700px;
+            margin: 20px;
+            transition: transform 0.5s ease;
+        }
+        
+        h1 {
+            color: #d32f2f;
+            font-size: 3rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite;
+            line-height: 1.2;
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        
+        button {
+            padding: 20px 50px;
+            font-size: 1.8rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 5;
+        }
+        
+        #yes-btn {
+            background: linear-gradient(45deg, #4CAF50, #2E7D32);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        #yes-btn:hover {
+            background: linear-gradient(45deg, #2E7D32, #1B5E20);
+            transform: scale(1.1);
+        }
+        
+        #no-btn {
+            background: linear-gradient(45deg, #f44336, #c62828);
+            color: white;
+            position: relative;
+            transition: left 0.1s, top 0.1s;
+        }
+        
+        .message {
+            margin-top: 30px;
+            font-size: 2rem;
+            color: #d32f2f;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 1s ease;
+            min-height: 60px;
+        }
+        
+        .love-message {
+            font-size: 4rem;
+            color: #d32f2f;
+            margin-top: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 1s ease;
+            line-height: 1.2;
+        }
+        
+        /* Heart balloon styles */
+        .balloon {
+            position: absolute;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .heart {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            background-color: #ff4081;
+            transform: rotate(45deg);
+            box-shadow: 0 0 20px rgba(255, 64, 129, 0.5);
+        }
+        
+        .heart:before,
+        .heart:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: #ff4081;
+            border-radius: 50%;
+        }
+        
+        .heart:before {
+            top: -30px;
+            left: 0;
+        }
+        
+        .heart:after {
+            top: 0;
+            left: -30px;
+        }
+        
+        .string {
+            position: absolute;
+            width: 2px;
+            height: 150px;
+            background-color: rgba(0, 0, 0, 0.3);
+            top: 60px;
+            left: 29px;
+            transform-origin: top;
+            animation: swing 4s infinite ease-in-out;
+        }
+        
+        /* Confetti styles */
+        .confetti {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            opacity: 0;
+            z-index: 20;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes swing {
+            0%, 100% {
+                transform: rotate(-5deg);
+            }
+            50% {
+                transform: rotate(5deg);
+            }
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .container {
+                padding: 25px;
+            }
+            
+            button {
+                padding: 15px 35px;
+                font-size: 1.5rem;
+            }
+            
+            .love-message {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            button {
+                width: 80%;
+            }
+            
+            .love-message {
+                font-size: 2.5rem;
+            }
+        }
+        
+        /* Celebration effect when Yes is clicked */
+        .celebrate .container {
+            animation: pulse 0.5s 3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lauren, will you be my Valentine?</h1>
+        
+        <div class="buttons-container">
+            <button id="yes-btn">YES! <i class="fas fa-heart"></i></button>
+            <button id="no-btn">NO <i class="fas fa-times"></i></button>
+        </div>
+        
+        <div class="message" id="message"></div>
+        <div class="love-message" id="love-message"></div>
+    </div>
+    
+    <script>
+        // Create heart balloons
+        function createHeartBalloons() {
+            const colors = ['#ff4081', '#d32f2f', '#ff79a8', '#ff1744', '#f50057', '#e91e63', '#ad1457'];
+            const balloonCount = 20;
+            
+            for (let i = 0; i < balloonCount; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                
+                // Random properties for each balloon
+                const size = Math.random() * 40 + 40; // 40-80px
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const left = Math.random() * 100; // 0-100%
+                const delay = Math.random() * 15; // 0-15s
+                const duration = Math.random() * 10 + 20; // 20-30s
+                
+                // Apply styles
+                balloon.style.width = `${size}px`;
+                balloon.style.height = `${size}px`;
+                balloon.style.left = `${left}vw`;
+                balloon.style.animation = `float ${duration}s linear ${delay}s infinite`;
+                
+                // Create heart shape
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                heart.style.backgroundColor = color;
+                heart.style.boxShadow = `0 0 ${size/3}px ${color}`;
+                
+                // Create heart pseudo-elements
+                heart.style.position = 'relative';
+                heart.style.transform = 'rotate(45deg)';
+                
+                // Create before pseudo-element simulation
+                const before = document.createElement('div');
+                before.style.position = 'absolute';
+                before.style.width = `${size}px`;
+                before.style.height = `${size}px`;
+                before.style.backgroundColor = color;
+                before.style.borderRadius = '50%';
+                before.style.top = `-${size/2}px`;
+                before.style.left = '0';
+                
+                // Create after pseudo-element simulation
+                const after = document.createElement('div');
+                after.style.position = 'absolute';
+                after.style.width = `${size}px`;
+                after.style.height = `${size}px`;
+                after.style.backgroundColor = color;
+                after.style.borderRadius = '50%';
+                after.style.top = '0';
+                after.style.left = `-${size/2}px`;
+                
+                heart.appendChild(before);
+                heart.appendChild(after);
+                
+                // Add string
+                const string = document.createElement('div');
+                string.className = 'string';
+                string.style.height = `${size * 2.5}px`;
+                string.style.top = `${size}px`;
+                string.style.left = `${size/2 - 1}px`;
+                
+                balloon.appendChild(heart);
+                balloon.appendChild(string);
+                document.body.appendChild(balloon);
+            }
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const confettiCount = 200;
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50', '#FFEB3B', '#FF9800'];
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                // Random properties
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const size = Math.random() * 15 + 5;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 3 + 2;
+                
+                // Apply styles
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confetti.style.backgroundColor = color;
+                confetti.style.left = `${left}vw`;
+                confetti.style.animation = `confetti-fall ${duration}s ease-in ${delay}s forwards`;
+                
+                // Random shape (circle or square)
+                if (Math.random() > 0.5) {
+                    confetti.style.borderRadius = '50%';
+                }
+                
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation completes
+                setTimeout(() => {
+                    if (confetti.parentNode) {
+                        confetti.parentNode.removeChild(confetti);
+                    }
+                }, (duration + delay) * 1000);
+            }
+        }
+        
+        // Move the "No" button away from cursor
+        function setupNoButton() {
+            const noBtn = document.getElementById('no-btn');
+            const container = document.querySelector('.container');
+            const buttonsContainer = document.querySelector('.buttons-container');
+            
+            // Make No button unclickable
+            noBtn.style.pointerEvents = 'none';
+            
+            // Variables to track button position
+            let btnX = 0;
+            let btnY = 0;
+            
+            // Move button when mouse moves
+            document.addEventListener('mousemove', (e) => {
+                const btnRect = noBtn.getBoundingClientRect();
+                const btnCenterX = btnRect.left + btnRect.width / 2;
+                const btnCenterY = btnRect.top + btnRect.height / 2;
+                
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+                
+                // Calculate distance between cursor and button center
+                const distance = Math.sqrt(
+                    Math.pow(mouseX - btnCenterX, 2) + 
+                    Math.pow(mouseY - btnCenterY, 2)
+                );
+                
+                // If cursor is close to the button (within 100px)
+                if (distance < 100) {
+                    const containerRect = container.getBoundingClientRect();
+                    const buttonsRect = buttonsContainer.getBoundingClientRect();
+                    
+                    // Calculate direction away from cursor
+                    const angle = Math.atan2(mouseY - btnCenterY, mouseX - btnCenterX);
+                    
+                    // Move button in opposite direction
+                    btnX += Math.cos(angle + Math.PI) * 20;
+                    btnY += Math.sin(angle + Math.PI) * 20;
+                    
+                    // Constrain button to buttons container
+                    const maxX = buttonsRect.width - btnRect.width;
+                    const maxY = buttonsRect.height - btnRect.height;
+                    
+                    btnX = Math.max(0, Math.min(btnX, maxX));
+                    btnY = Math.max(0, Math.min(btnY, maxY));
+                    
+                    // Apply new position
+                    noBtn.style.position = 'absolute';
+                    noBtn.style.left = `${btnX}px`;
+                    noBtn.style.top = `${btnY}px`;
+                }
+            });
+            
+            // Also move on touch devices
+            document.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    const touch = e.touches[0];
+                    const btnRect = noBtn.getBoundingClientRect();
+                    const btnCenterX = btnRect.left + btnRect.width / 2;
+                    const btnCenterY = btnRect.top + btnRect.height / 2;
+                    
+                    const touchX = touch.clientX;
+                    const touchY = touch.clientY;
+                    
+                    // Calculate distance between touch and button center
+                    const distance = Math.sqrt(
+                        Math.pow(touchX - btnCenterX, 2) + 
+                        Math.pow(touchY - btnCenterY, 2)
+                    );
+                    
+                    // If touch is close to the button (within 100px)
+                    if (distance < 100) {
+                        const containerRect = container.getBoundingClientRect();
+                        const buttonsRect = buttonsContainer.getBoundingClientRect();
+                        
+                        // Calculate direction away from touch
+                        const angle = Math.atan2(touchY - btnCenterY, touchX - btnCenterX);
+                        
+                        // Move button in opposite direction
+                        btnX += Math.cos(angle + Math.PI) * 30;
+                        btnY += Math.sin(angle + Math.PI) * 30;
+                        
+                        // Constrain button to buttons container
+                        const maxX = buttonsRect.width - btnRect.width;
+                        const maxY = buttonsRect.height - btnRect.height;
+                        
+                        btnX = Math.max(0, Math.min(btnX, maxX));
+                        btnY = Math.max(0, Math.min(btnY, maxY));
+                        
+                        // Apply new position
+                        noBtn.style.position = 'absolute';
+                        noBtn.style.left = `${btnX}px`;
+                        noBtn.style.top = `${btnY}px`;
+                    }
+                }
+            }, { passive: true });
+        }
+        
+        // Handle Yes button click
+        function setupYesButton() {
+            const yesBtn = document.getElementById('yes-btn');
+            const message = document.getElementById('message');
+            const loveMessage = document.getElementById('love-message');
+            const noBtn = document.getElementById('no-btn');
+            const container = document.querySelector('.container');
+            const body = document.body;
+            
+            yesBtn.addEventListener('click', () => {
+                // Show messages
+                message.textContent = "I knew you would say yes!";
+                message.style.opacity = 1;
+                
+                setTimeout(() => {
+                    loveMessage.textContent = "I love you!";
+                    loveMessage.style.opacity = 1;
+                }, 1000);
+                
+                // Create confetti
+                createConfetti();
+                
+                // Hide the no button
+                noBtn.style.display = 'none';
+                
+                // Add celebration class to body
+                body.classList.add('celebrate');
+                
+                // Change background to more romantic color
+                body.style.background = 'linear-gradient(135deg, #ff7eb3, #ff758c)';
+                
+                // Add heart animation to yes button
+                yesBtn.innerHTML = 'YES! <i class="fas fa-heart" style="animation: pulse 1s infinite"></i>';
+                yesBtn.style.animation = 'pulse 0.5s infinite';
+                yesBtn.style.cursor = 'default';
+                
+                // Create more confetti after a delay
+                setTimeout(createConfetti, 1000);
+                setTimeout(createConfetti, 2000);
+                
+                // Make heart balloons pulse
+                document.querySelectorAll('.balloon').forEach(balloon => {
+                    balloon.style.animation = 'pulse 1s infinite, float 20s linear infinite';
+                });
+            });
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createHeartBalloons();
+            setupNoButton();
+            setupYesButton();
+        });
+    </script>
+</body>
+</html>
